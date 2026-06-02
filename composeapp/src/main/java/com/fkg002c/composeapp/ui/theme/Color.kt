@@ -10,5 +10,12 @@ val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
-val mainBlackColor = Color(0xFF1E1E1E)
+//Light theme
+val background = Color(0xFFF3EDF5)
+val mainTitleColor = Color(0xFF1E1E1E)
 val subtitleGrayColor = Color(0xFF8C8C8C)
+
+// Dark theme
+val backgroundDark = Color(0xFF121212)
+val mainTitleColorDark = Color(0xFFEAEAEA)
+val subtitleGrayColorDark = Color(0xFFD1D1D1)
