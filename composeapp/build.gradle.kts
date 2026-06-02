@@ -15,8 +15,8 @@ android {
         applicationId = "com.fkg002c.composeapp"
         minSdk = 24
         targetSdk = 37
-        versionCode = 4
-        versionName = "0.4"
+        versionCode = 5
+        versionName = "0.5"
     }
 
     buildTypes {
@@ -43,4 +43,6 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+
+    debugImplementation(libs.androidx.compose.ui.tooling)
 }
