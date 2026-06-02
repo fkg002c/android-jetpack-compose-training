@@ -64,16 +64,19 @@ fun HomeScreen() {
 }
 
 @Composable
-fun StudyAppHeader() {
+fun StudyAppHeader(
+    title: String = "",
+    subtitle: String = ""
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "AndroidSprint",
+            text = title,
             style = MaterialTheme.typography.headlineLarge,
         )
         Text(
-            text = "Learning Kotlin & Android through practice",
+            text = subtitle,
             color = MaterialTheme.colorScheme.subtitle,
             style = MaterialTheme.typography.headlineMedium,
         )
