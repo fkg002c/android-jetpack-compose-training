@@ -12,11 +12,11 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.navigation.compose.rememberNavController
+import com.fkg002c.basenavigation.navigation.AppNavHost
 import com.fkg002c.basenavigation.ui.theme.ComposeAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -31,30 +31,12 @@ class MainActivity : ComponentActivity() {
                             .padding(innerPadding)
                             .fillMaxSize()
                     ) {
-                        AppNavigation()
+                        val navController = rememberNavController()
+                        AppNavHost(navController)
                     }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun AppNavigation() {
-    val currentScreen = remember { mutableStateOf("first") }
-
-    when (currentScreen.value) {
-        "first" -> FirstScreen(
-            onNextClick = {
-                currentScreen.value = "second"
-            }
-        )
-
-        "second" -> SecondScreen(
-            onNextClick = {
-                currentScreen.value = "first"
-            }
-        )
     }
 }
 
