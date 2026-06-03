@@ -1,14 +1,14 @@
 package com.fkg002c.composeapp
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.Button
@@ -22,6 +22,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
@@ -89,12 +90,42 @@ fun LessonsListScreen() {
                     ),
                     modifier = Modifier.height(height = 16.dp)
                 )
+
                 Spacer(Modifier.height(16.dp))
 
-                val scrollState = rememberScrollState()
+                val lessons = listOf("Lesson 1", "Lesson 2", "Lesson 3", "Lesson 4", "Lesson 5", "Lesson 6", "Lesson 7", "Lesson 8")
 
                 LazyColumn(Modifier.fillMaxWidth()) {
-                    items(5000) { index ->
+                    stickyHeader {
+                        Text(
+                            text = "Paragraph heading",
+                            modifier = Modifier
+                                .background(Color.LightGray)
+                                .padding(8.dp)
+                                .fillMaxWidth()
+                        )
+                    }
+
+                    itemsIndexed(lessons) { index, lesson ->
+
+                        Text(
+                            text = "${index + 1}. $lesson",
+                            modifier = Modifier.padding(start = 20.dp),
+                            fontSize = 24.sp
+                        )
+                    }
+
+                    stickyHeader {
+                        Text(
+                            text = "Chapter heading",
+                            modifier = Modifier
+                                .background(Color.LightGray)
+                                .padding(8.dp)
+                                .fillMaxWidth()
+                        )
+                    }
+
+                    items(50) { index ->
                         Text(
                             text = "${index + 1}",
                             modifier = Modifier.padding(start = 20.dp),
