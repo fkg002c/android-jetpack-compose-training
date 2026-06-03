@@ -93,18 +93,13 @@ fun LessonsListScreen() {
 
                 val scrollState = rememberScrollState()
 
-                LazyColumn(
-                    Modifier
-                        .fillMaxWidth()
-                ) {
-                    repeat(5000) { index ->
-                        item() {
-                            Text(
-                                text = "${index + 1}",
-                                modifier = Modifier.padding(start = 20.dp),
-                                fontSize = 24.sp
-                            )
-                        }
+                LazyColumn(Modifier.fillMaxWidth()) {
+                    items(5000) { index ->
+                        Text(
+                            text = "${index + 1}",
+                            modifier = Modifier.padding(start = 20.dp),
+                            fontSize = 24.sp
+                        )
                     }
                 }
             }
