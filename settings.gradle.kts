@@ -24,4 +24,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Compose App"
 include(":composeapp")
- 
+include(":basenavigation")
