@@ -15,8 +15,8 @@ android {
         applicationId = "com.fkg002c.composeapp"
         minSdk = 24
         targetSdk = 37
-        versionCode = 9
-        versionName = "0.9"
+        versionCode = 10
+        versionName = "0.10-begin"
     }
 
     buildTypes {
