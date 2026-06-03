@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.Button
@@ -87,6 +89,23 @@ fun LessonsListScreen() {
                     modifier = Modifier.height(height = 16.dp)
                 )
                 Spacer(Modifier.height(16.dp))
+
+                val scrollState = rememberScrollState()
+
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(scrollState)
+                ) {
+                    repeat(50) { index ->
+                        Text(
+                            text = "${index + 1}",
+                            modifier = Modifier.padding(start = 20.dp),
+                            fontSize = 24.sp
+                        )
+
+                    }
+                }
             }
         }
     )
