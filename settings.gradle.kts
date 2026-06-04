@@ -26,3 +26,4 @@ rootProject.name = "Compose App"
 include(":composeapp")
 include(":basenavigation")
 include(":modaldrawer")
+include(":modaldrawer2")
