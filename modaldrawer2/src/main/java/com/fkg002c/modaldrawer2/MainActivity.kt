@@ -60,9 +60,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge(
-            statusBarStyle = SystemBarStyle.dark(
-                scrim = Color.Transparent.toArgb() // For dark app bars
-            )
+//            statusBarStyle = SystemBarStyle.auto(
+//                lightScrim =  Color.Transparent.toArgb(),
+//                darkScrim = Color.Transparent.toArgb(), // For dark app bars
+//            )
         )
         setContent {
             ComposeAppTheme {
@@ -135,11 +136,12 @@ fun MainApp() {
                     TopAppBar(
                         title = { Text("Echo: ${currentScreen.title}") },
                         modifier = Modifier.padding(top = 0.dp),
-                        colors = TopAppBarDefaults.topAppBarColors(
-                            containerColor = MaterialTheme.colorScheme.primary,
-                            titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                            navigationIconContentColor = MaterialTheme.colorScheme.onPrimary
-                        ),
+//                        colors = TopAppBarDefaults.topAppBarColors(
+//                            containerColor = MaterialTheme.colorScheme.primary,
+//                            titleContentColor = MaterialTheme.colorScheme.onPrimary,
+//                            navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
+//                            actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
+//                        ),
                         // Dynamically updates title
                         navigationIcon = {
                             IconButton(onClick = {
