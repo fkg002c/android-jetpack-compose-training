@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.sp
 
 @Preview(showSystemUi = true)
 @Composable
-fun LocalDtrStorageScreen(
+fun LocalFilesStorageScreen(
     padding: PaddingValues = PaddingValues()
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
@@ -29,7 +29,7 @@ fun LocalDtrStorageScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text("Local DTR Storage", fontSize = 36.sp)
+            Text("Local Files storage", fontSize = 36.sp)
         }
     }
 }

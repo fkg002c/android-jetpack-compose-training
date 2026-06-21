@@ -8,8 +8,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class Destination(val route: String) {
     data object Settings : Destination("route_settings")
-    data object LogsSchedule : Destination("route_logs_schedule")
-    data object LocalDtrStorage : Destination("route_local_dtr_storage")
+    data object WorkersInfo : Destination("workers_info")
+    data object LocalFilesStorage : Destination("local_files_storage")
 }
 
 data class NavigationItem(
@@ -25,13 +25,13 @@ val menuItems = listOf(
         route = Destination.Settings.route,
     ),
     NavigationItem(
-        title = "Logs schedule",
+        title = "Workers info",
         icon = Icons.Filled.Home,
-        route = Destination.LogsSchedule.route,
+        route = Destination.WorkersInfo.route,
     ),
     NavigationItem(
-        title = "Local DTR Storage",
+        title = "Local Files storage",
         icon = Icons.Filled.Info,
-        route = Destination.LocalDtrStorage.route,
+        route = Destination.LocalFilesStorage.route,
     ),
 )

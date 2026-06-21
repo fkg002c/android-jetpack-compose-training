@@ -3,7 +3,6 @@ package com.fkg002c.modaldrawer2
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.activity.SystemBarStyle
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -18,14 +17,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,23 +34,22 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.fkg002c.modaldrawer2.ui.screen.LocalDtrStorageScreen
-import com.fkg002c.modaldrawer2.ui.screen.LogsScheduleScreen
+import com.fkg002c.modaldrawer2.ui.screen.LocalFilesStorageScreen
 import com.fkg002c.modaldrawer2.ui.screen.SettingScreen
+import com.fkg002c.modaldrawer2.ui.screen.WorkersInfoScreen
 import com.fkg002c.modaldrawer2.ui.theme.ComposeAppTheme
 import kotlinx.coroutines.launch
 
 enum class Screen(val title: String) {
     SETTINGS("Settings"),
-    LOGS_SCHEDULE("Logs schedule"),
-    DTR_STORAGE("Local DTR Storage")
+    WORKERS_INFO("Workers info"),
+    LOCAL_FILES_STORAGE("Local Files storage")
 }
 
 class MainActivity : ComponentActivity() {
@@ -99,7 +95,7 @@ fun MainApp() {
                 modifier = Modifier
                     .padding(end = 150.dp)
             ) {
-                Text("Echo", modifier = Modifier.padding(19.dp))
+                Text("Application", modifier = Modifier.padding(19.dp))
                 HorizontalDivider()
                 Spacer(modifier = Modifier.height(0.dp))
                 menuItems.forEachIndexed { index, item ->
@@ -134,7 +130,7 @@ fun MainApp() {
             Scaffold(
                 topBar = {
                     TopAppBar(
-                        title = { Text("Echo: ${currentScreen.title}") },
+                        title = { Text("Application: ${currentScreen.title}") },
                         modifier = Modifier.padding(top = 0.dp),
 //                        colors = TopAppBarDefaults.topAppBarColors(
 //                            containerColor = MaterialTheme.colorScheme.primary,
@@ -179,8 +175,8 @@ fun MainApp() {
                     modifier = Modifier.padding(innerPadding)
                 ) {
                     composable(route = Screen.SETTINGS.name) { SettingScreen() }
-                    composable(route = Screen.LOGS_SCHEDULE.name) { LogsScheduleScreen() }
-                    composable(route = Screen.DTR_STORAGE.name) { LocalDtrStorageScreen() }
+                    composable(route = Screen.WORKERS_INFO.name) { WorkersInfoScreen() }
+                    composable(route = Screen.LOCAL_FILES_STORAGE.name) { LocalFilesStorageScreen() }
                 }
             }
         }
