@@ -19,13 +19,13 @@ val menuItems = listOf(
         route = Screen.SETTINGS.name,
     ),
     NavigationItem(
-        title = "Logs schedule",
+        title = "Workers info",
         icon = Icons.Filled.Home,
-        route = Screen.LOGS_SCHEDULE.name,
+        route = Screen.WORKERS_INFO.name,
     ),
     NavigationItem(
-        title = "Local DTR Storage",
+        title = "Local Files storage",
         icon = Icons.Filled.Info,
-        route = Screen.DTR_STORAGE.name,
+        route = Screen.LOCAL_FILES_STORAGE.name,
     ),
 )

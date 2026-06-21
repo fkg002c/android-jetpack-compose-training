@@ -1,10 +1,12 @@
 package com.fkg002c.modaldrawer.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
@@ -17,11 +19,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Preview(showSystemUi = true)
 @Composable
-fun LogsScheduleScreen(
+fun WorkersInfoScreen(
     padding: PaddingValues = PaddingValues(top = topPadding(), bottom = bottomPadding())
 ) {
     Box(
@@ -30,19 +33,25 @@ fun LogsScheduleScreen(
             .fillMaxSize()
     ) {
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Yellow),
-//            horizontalAlignment = Alignment.CenterHorizontally,
-//            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             repeat(50) { index ->
                 item {
-                    Text(
-                        text = "Logs Schedule ${index + 1}",
-                        fontSize = 36.sp,
-//                        modifier = Modifier.padding(5.dp)
-                    )
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+
+                            .background(
+                                if (index % 2 == 0) Color.Gray else Color.LightGray
+                            )
+                    ) {
+                        Text(
+                            modifier = Modifier.padding(horizontal = 12.dp),
+                            text = "Worker info ${index + 1}",
+                            fontSize = 36.sp,
+                        )
+                    }
                 }
             }
         }

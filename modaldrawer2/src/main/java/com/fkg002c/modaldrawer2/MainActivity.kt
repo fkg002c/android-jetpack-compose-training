@@ -38,16 +38,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.fkg002c.modaldrawer2.ui.screen.LocalDtrStorageScreen
-import com.fkg002c.modaldrawer2.ui.screen.LogsScheduleScreen
+import com.fkg002c.modaldrawer2.ui.screen.LocalFilesStorageScreen
+import com.fkg002c.modaldrawer2.ui.screen.WorkersInfoScreen
 import com.fkg002c.modaldrawer2.ui.screen.SettingScreen
 import com.fkg002c.modaldrawer2.ui.theme.ComposeAppTheme
 import kotlinx.coroutines.launch
 
 enum class Screen(val title: String) {
     SETTINGS("Settings"),
-    LOGS_SCHEDULE("Logs schedule"),
-    DTR_STORAGE("Local DTR Storage")
+    WORKERS_INFO("Workers info"),
+    LOCAL_FILES_STORAGE("Local Files storage")
 }
 
 class MainActivity : ComponentActivity() {
@@ -81,7 +81,7 @@ fun MainApp() {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Echo: ${currentScreen.title}") }, // Dynamically updates title
+                title = { Text("Application: ${currentScreen.title}") }, // Dynamically updates title
                 navigationIcon = {
                     IconButton(onClick = {
                         scope.launch {
@@ -112,14 +112,9 @@ fun MainApp() {
             }
             backPressedTime = System.currentTimeMillis()
         }
-        // ModalNavigationDrawer goes here, controlling the NavHost
         ModalNavigationDrawer(
-//            modifier = Modifier.padding(innerPadding)
-//                .background(Color.Gray),
             drawerContent = {
                 ModalDrawerSheet {
-//                    Text("Echo", modifier = Modifier.padding(16.dp))
-//                    HorizontalDivider()
                     Spacer(modifier = Modifier.height(70.dp))
                     menuItems.forEachIndexed { index, item ->
                         val selected = index == selectedItemIndex
@@ -156,8 +151,8 @@ fun MainApp() {
                 modifier = Modifier.padding(innerPadding)
             ) {
                 composable(route = Screen.SETTINGS.name) { SettingScreen() }
-                composable(route = Screen.LOGS_SCHEDULE.name) { LogsScheduleScreen() }
-                composable(route = Screen.DTR_STORAGE.name) { LocalDtrStorageScreen() }
+                composable(route = Screen.WORKERS_INFO.name) { WorkersInfoScreen() }
+                composable(route = Screen.LOCAL_FILES_STORAGE.name) { LocalFilesStorageScreen() }
             }
         }
     }

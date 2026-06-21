@@ -11,6 +11,9 @@ junitVersion = "1.3.0"
 espressoCore = "3.7.0"
 navigationCompose = "2.9.8"
 materialIconsCoreAndroid = "1.7.8"
+runtime = "1.11.2"
+numberpicker = "1.0.3"
+
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -30,6 +33,8 @@ androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 androidx-compose-material-icons-core-android = { group = "androidx.compose.material", name = "material-icons-core-android", version.ref = "materialIconsCoreAndroid" }
+androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "runtime" }
+numberpicker = { group = "com.chargemap.compose", name = "numberpicker", version.ref = "numberpicker" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

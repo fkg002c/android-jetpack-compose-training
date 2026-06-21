@@ -80,7 +80,7 @@ class MainActivity : ComponentActivity() {
                     ModalNavigationDrawer(
                         drawerContent = {
                             ModalDrawerSheet {
-                                Text("Echo", modifier = Modifier.padding(16.dp))
+                                Text("Application", modifier = Modifier.padding(16.dp))
                                 HorizontalDivider()
                                 Spacer(modifier = Modifier.height(16.dp))
                                 menuItems.forEachIndexed { index, item ->
@@ -116,7 +116,7 @@ class MainActivity : ComponentActivity() {
                             topBar = {
                                 TopAppBar(
                                     title = {
-                                        Text(text = "Echo")
+                                        Text(text = "Application")
                                     },
                                     navigationIcon = {
                                         IconButton(onClick = {
