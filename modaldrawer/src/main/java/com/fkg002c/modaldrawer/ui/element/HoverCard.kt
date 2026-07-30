@@ -3,6 +3,7 @@ package com.fkg002c.modaldrawer.ui.element
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
@@ -46,19 +47,30 @@ fun HoverCard(
 
     val isDarkTheme = isSystemInDarkTheme()
 
+    // Настройки высоты (влияет на размытие тени)
     val elevation by animateDpAsState(
-        targetValue = if (isPressed) 2.dp else 12.dp,
+        targetValue = if (isPressed) 2.dp else 16.dp,
         animationSpec = tween(durationMillis = 150)
     )
 
+    // Анимация масштаба
     val scale by animateFloatAsState(
         targetValue = if (isPressed) 0.98f else 1.02f,
         animationSpec = tween(durationMillis = 150)
     )
 
-    // Мягкое неоновое свечение в темной теме (берем основной розовый цвет)
+    // Анимация прозрачности рамки: яркая в парении, тусклая при нажатии
+    val borderAlpha by animateFloatAsState(
+        targetValue = if (isPressed) 0.2f else 0.8f,
+        animationSpec = tween(durationMillis = 150)
+    )
+
+    // Базовый цвет для эффектов (бирюзовый/голубой с ваших кнопок)
+    val accentColor = MaterialTheme.colorScheme.primary
+
+    // Цвет тени: увеличиваем alpha до 0.8 для высокой интенсивности
     val shadowColor = if (isDarkTheme) {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
+        accentColor.copy(alpha = 0.8f)
     } else {
         Color.Black.copy(alpha = 0.2f)
     }
@@ -66,26 +78,38 @@ fun HoverCard(
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp) // Важно: большой паддинг, чтобы свечение не обрезалось экраном
+            .padding(16.dp)
             .graphicsLayer {
                 this.scaleX = scale
                 this.scaleY = scale
             }
-            // 1. Сначала рисуем тень (она выходит наружу)
+            // Первый слой тени (дает широкое размытие)
             .shadow(
                 elevation = elevation,
                 shape = RoundedCornerShape(10.dp),
-                clip = false, // Тень не должна обрезаться!
+                clip = false,
                 ambientColor = shadowColor,
                 spotColor = shadowColor
             )
-            // 2. Только потом клипаем внутренний контент карточки
+            // Второй слой тени поверх (удваивает интенсивность свечения)
+            .shadow(
+                elevation = elevation / 2,
+                shape = RoundedCornerShape(10.dp),
+                clip = false,
+                ambientColor = shadowColor,
+                spotColor = shadowColor
+            )
+            // Тонкая аккуратная светящаяся рамка
+            .border(
+                width = 1.dp,
+                color = if (isDarkTheme) accentColor.copy(alpha = borderAlpha) else Color.Transparent,
+                shape = RoundedCornerShape(10.dp)
+            )
             .clip(RoundedCornerShape(10.dp))
             .clickable(
                 interactionSource = interactionSource,
                 indication = null
             ) { },
-        // Возвращаем ваш исходный цвет фона
         color = MaterialTheme.colorScheme.surface
     ) {
         Column(modifier = Modifier.padding(10.dp)) {
