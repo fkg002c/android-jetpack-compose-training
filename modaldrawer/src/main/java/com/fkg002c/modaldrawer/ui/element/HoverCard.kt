@@ -52,33 +52,43 @@ fun HoverCard(
 
     val isDarkTheme = isSystemInDarkTheme()
 
-    // 1. Бесконечная анимация для пульсации в покое
+    // 1. Анимации для темной темы (пульсация)
     val infiniteTransition = rememberInfiniteTransition(label = "PulseTransition")
     val pulseAlpha by infiniteTransition.animateFloat(
         initialValue = 0.4f,
         targetValue = 0.9f,
         animationSpec = infiniteRepeatable(
             animation = tween(durationMillis = 1200, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse // Плавно возвращает анимацию назад
+            repeatMode = RepeatMode.Reverse
         ),
         label = "PulseAlpha"
     )
 
-    // Выбираем прозрачность рамки: если нажата — затухает, если в покое — пульсирует
-    val finalBorderAlpha = if (isPressed) 0.2f else pulseAlpha
+    // 2. Анимация для светлой темы (плавное затухание при нажатии)
+    val lightBorderAlpha by animateFloatAsState(
+        targetValue = if (isPressed) 0.3f else 1.0f,
+        animationSpec = tween(durationMillis = 150)
+    )
 
+    // 3. Динамический выбор цвета и прозрачности рамки
+    val borderColor = if (isDarkTheme) {
+        val finalAlpha = if (isPressed) 0.2f else pulseAlpha
+        MaterialTheme.colorScheme.primary.copy(alpha = finalAlpha)
+    } else {
+        // Интенсивный нейтральный контур для светлой темы
+        MaterialTheme.colorScheme.outlineVariant.copy(alpha = lightBorderAlpha)
+    }
+
+    // Базовые параметры тени и масштаба
     val elevation by animateDpAsState(
         targetValue = if (isPressed) 2.dp else 16.dp,
         animationSpec = tween(durationMillis = 150)
     )
-
     val scale by animateFloatAsState(
         targetValue = if (isPressed) 0.98f else 1.02f,
         animationSpec = tween(durationMillis = 150)
     )
-
-    val accentColor = MaterialTheme.colorScheme.primary
-    val shadowColor = if (isDarkTheme) accentColor.copy(alpha = 0.8f) else Color.Black.copy(alpha = 0.2f)
+    val shadowColor = if (isDarkTheme) MaterialTheme.colorScheme.primary.copy(alpha = 0.8f) else Color.Black.copy(alpha = 0.15f)
 
     Surface(
         modifier = Modifier
@@ -90,10 +100,10 @@ fun HoverCard(
             }
             .shadow(elevation = elevation, shape = RoundedCornerShape(10.dp), clip = false, ambientColor = shadowColor, spotColor = shadowColor)
             .shadow(elevation = elevation / 2, shape = RoundedCornerShape(10.dp), clip = false, ambientColor = shadowColor, spotColor = shadowColor)
-            // Применяем динамическую пульсирующую прозрачность finalBorderAlpha
+            // Применяем вычисленный borderColor, который теперь работает везде
             .border(
                 width = 1.dp,
-                color = if (isDarkTheme) accentColor.copy(alpha = finalBorderAlpha) else Color.Transparent,
+                color = borderColor,
                 shape = RoundedCornerShape(10.dp)
             )
             .clip(RoundedCornerShape(10.dp))
