@@ -1,6 +1,10 @@
 package com.fkg002c.modaldrawer.ui.element
 
-import androidx.compose.foundation.border
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -11,11 +15,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
@@ -28,20 +36,42 @@ fun HoverCard(
     title: String,
     content: @Composable ColumnScope.() -> Unit
 ) {
-    Column(
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+
+    // Анимация высоты тени: 12.dp в покое (парение), 2.dp при нажатии
+    val elevation by animateDpAsState(
+        targetValue = if (isPressed) 2.dp else 12.dp,
+        animationSpec = tween(durationMillis = 150)
+    )
+
+    Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
-            .border(1.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(10.dp)) // Розовая рамка со скрина
-            .padding(10.dp)
-    ) {
-        Text(
-            text = title,
-            fontSize = 18.sp,
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(bottom = 8.dp)
+            .padding(8.dp) // Внешний паддинг
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null // Отключаем ripple-эффект для чистого парения
+            ) { /* Действие при клике на карточку */ },
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface // Фон карточки
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = elevation
         )
-        content()
+    ) {
+        Column(
+            modifier = Modifier.padding(10.dp) // Внутренний паддинг
+        ) {
+            Text(
+                text = title,
+                fontSize = 18.sp,
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+            content()
+        }
     }
 }
 
