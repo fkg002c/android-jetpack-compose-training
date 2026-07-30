@@ -52,7 +52,7 @@ fun HoverCard(
 
     val isDarkTheme = isSystemInDarkTheme()
 
-    // 1. Анимации для темной темы (пульсация)
+    // 1. Анимации пульсации для темной темы
     val infiniteTransition = rememberInfiniteTransition(label = "PulseTransition")
     val pulseAlpha by infiniteTransition.animateFloat(
         initialValue = 0.4f,
@@ -64,22 +64,32 @@ fun HoverCard(
         label = "PulseAlpha"
     )
 
-    // 2. Анимация для светлой темы (плавное затухание при нажатии)
+    // Анимация прозрачности рамки для светлой темы при нажатии
     val lightBorderAlpha by animateFloatAsState(
         targetValue = if (isPressed) 0.3f else 1.0f,
         animationSpec = tween(durationMillis = 150)
     )
 
-    // 3. Динамический выбор цвета и прозрачности рамки
+    // 2. Логика цвета рамки (теперь везде используется основной цвет primary)
+    val accentColor = MaterialTheme.colorScheme.primary
     val borderColor = if (isDarkTheme) {
         val finalAlpha = if (isPressed) 0.2f else pulseAlpha
-        MaterialTheme.colorScheme.primary.copy(alpha = finalAlpha)
+        accentColor.copy(alpha = finalAlpha)
     } else {
-        // Интенсивный нейтральный контур для светлой темы
-        MaterialTheme.colorScheme.outlineVariant.copy(alpha = lightBorderAlpha)
+        // В светлой теме рамка будет аккуратного основного цвета, бледнеющая при нажатии
+        accentColor.copy(alpha = 0.4f * lightBorderAlpha)
     }
 
-    // Базовые параметры тени и масштаба
+    // 3. Динамический фон для карточки (Разделение слоев)
+    val cardBackgroundColor = if (isDarkTheme) {
+        // В темной теме карточка чуть светлее общего абсолютно черного фона
+        MaterialTheme.colorScheme.surfaceContainer
+    } else {
+        // В светлой теме карточка остается кипенно-белой, выделяясь на серой подложке экрана
+        MaterialTheme.colorScheme.surface
+    }
+
+    // Параметры парения и масштаба
     val elevation by animateDpAsState(
         targetValue = if (isPressed) 2.dp else 16.dp,
         animationSpec = tween(durationMillis = 150)
@@ -88,7 +98,7 @@ fun HoverCard(
         targetValue = if (isPressed) 0.98f else 1.02f,
         animationSpec = tween(durationMillis = 150)
     )
-    val shadowColor = if (isDarkTheme) MaterialTheme.colorScheme.primary.copy(alpha = 0.8f) else Color.Black.copy(alpha = 0.15f)
+    val shadowColor = if (isDarkTheme) accentColor.copy(alpha = 0.8f) else Color.Black.copy(alpha = 0.15f)
 
     Surface(
         modifier = Modifier
@@ -100,15 +110,10 @@ fun HoverCard(
             }
             .shadow(elevation = elevation, shape = RoundedCornerShape(10.dp), clip = false, ambientColor = shadowColor, spotColor = shadowColor)
             .shadow(elevation = elevation / 2, shape = RoundedCornerShape(10.dp), clip = false, ambientColor = shadowColor, spotColor = shadowColor)
-            // Применяем вычисленный borderColor, который теперь работает везде
-            .border(
-                width = 1.dp,
-                color = borderColor,
-                shape = RoundedCornerShape(10.dp)
-            )
+            .border(width = 1.dp, color = borderColor, shape = RoundedCornerShape(10.dp))
             .clip(RoundedCornerShape(10.dp))
             .clickable(interactionSource = interactionSource, indication = null) { },
-        color = MaterialTheme.colorScheme.surface
+        color = cardBackgroundColor // Применяем разделенный фон
     ) {
         Column(modifier = Modifier.padding(10.dp)) {
             Text(
