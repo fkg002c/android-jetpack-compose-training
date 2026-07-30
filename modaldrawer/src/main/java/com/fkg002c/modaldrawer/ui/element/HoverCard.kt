@@ -6,6 +6,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -27,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,36 +43,51 @@ fun HoverCard(
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
 
-    // Плавная анимация высоты тени
+    // Проверяем, включена ли темная тема прямо сейчас
+    val isDarkTheme = isSystemInDarkTheme()
+
     val elevation by animateDpAsState(
         targetValue = if (isPressed) 2.dp else 12.dp,
         animationSpec = tween(durationMillis = 150)
     )
 
-    // Добавляем микро-масштабирование. В парении карточка чуть больше (1.02), при нажатии сжимается (0.98)
     val scale by animateFloatAsState(
         targetValue = if (isPressed) 0.98f else 1.02f,
         animationSpec = tween(durationMillis = 150)
     )
 
+    // Выбираем цвет тени: в темной теме это будет полупрозрачный основной (розовый/фиолетовый) цвет
+    val shadowColor = if (isDarkTheme) {
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
+    } else {
+        Color.Black.copy(alpha = 0.4f) // Стандартная мягкая темная тень для светлой темы
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(12.dp) // Чуть увеличим паддинг, чтобы тень не обрезалась границами экрана
+            .padding(14.dp) // Немного увеличили, чтобы "неоновое" свечение не резалось краями
             .graphicsLayer {
                 this.scaleX = scale
                 this.scaleY = scale
-                this.shadowElevation = elevation.toPx() // Гарантированная отрисовка тени через слой
+                this.shadowElevation = elevation.toPx()
+
+                // Переопределяем цвета теней Android на наш кастомный цвет
+                this.ambientShadowColor = shadowColor
+                this.spotShadowColor = shadowColor
+
                 this.clip = true
                 this.shape = RoundedCornerShape(10.dp)
             }
             .clickable(
                 interactionSource = interactionSource,
                 indication = null
-            ) { /* Действие при клике на саму карточку */ },
+            ) { },
         shape = RoundedCornerShape(10.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
-        // elevation из параметров Card убираем, так как теперь им управляет graphicsLayer
+        colors = CardDefaults.cardColors(
+            // Карточка будет чуть светлее общего фона в темной теме
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
+        )
     ) {
         Column(modifier = Modifier.padding(10.dp)) {
             Text(
