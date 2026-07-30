@@ -1,6 +1,7 @@
 package com.fkg002c.modaldrawer.ui.element
 
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -26,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -39,31 +41,38 @@ fun HoverCard(
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
 
-    // Анимация высоты тени: 12.dp в покое (парение), 2.dp при нажатии
+    // Плавная анимация высоты тени
     val elevation by animateDpAsState(
         targetValue = if (isPressed) 2.dp else 12.dp,
+        animationSpec = tween(durationMillis = 150)
+    )
+
+    // Добавляем микро-масштабирование. В парении карточка чуть больше (1.02), при нажатии сжимается (0.98)
+    val scale by animateFloatAsState(
+        targetValue = if (isPressed) 0.98f else 1.02f,
         animationSpec = tween(durationMillis = 150)
     )
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp) // Внешний паддинг
+            .padding(12.dp) // Чуть увеличим паддинг, чтобы тень не обрезалась границами экрана
+            .graphicsLayer {
+                this.scaleX = scale
+                this.scaleY = scale
+                this.shadowElevation = elevation.toPx() // Гарантированная отрисовка тени через слой
+                this.clip = true
+                this.shape = RoundedCornerShape(10.dp)
+            }
             .clickable(
                 interactionSource = interactionSource,
-                indication = null // Отключаем ripple-эффект для чистого парения
-            ) { /* Действие при клике на карточку */ },
+                indication = null
+            ) { /* Действие при клике на саму карточку */ },
         shape = RoundedCornerShape(10.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface // Фон карточки
-        ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = elevation
-        )
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+        // elevation из параметров Card убираем, так как теперь им управляет graphicsLayer
     ) {
-        Column(
-            modifier = Modifier.padding(10.dp) // Внутренний паддинг
-        ) {
+        Column(modifier = Modifier.padding(10.dp)) {
             Text(
                 text = title,
                 fontSize = 18.sp,
