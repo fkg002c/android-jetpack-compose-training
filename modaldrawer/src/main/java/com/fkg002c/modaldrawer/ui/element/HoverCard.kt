@@ -17,10 +17,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,6 +27,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.semantics.Role
@@ -43,7 +44,6 @@ fun HoverCard(
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
 
-    // Проверяем, включена ли темная тема прямо сейчас
     val isDarkTheme = isSystemInDarkTheme()
 
     val elevation by animateDpAsState(
@@ -56,38 +56,37 @@ fun HoverCard(
         animationSpec = tween(durationMillis = 150)
     )
 
-    // Выбираем цвет тени: в темной теме это будет полупрозрачный основной (розовый/фиолетовый) цвет
+    // Мягкое неоновое свечение в темной теме (берем основной розовый цвет)
     val shadowColor = if (isDarkTheme) {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
     } else {
-        Color.Black.copy(alpha = 0.4f) // Стандартная мягкая темная тень для светлой темы
+        Color.Black.copy(alpha = 0.2f)
     }
 
-    Card(
+    Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(14.dp) // Немного увеличили, чтобы "неоновое" свечение не резалось краями
+            .padding(16.dp) // Важно: большой паддинг, чтобы свечение не обрезалось экраном
             .graphicsLayer {
                 this.scaleX = scale
                 this.scaleY = scale
-                this.shadowElevation = elevation.toPx()
-
-                // Переопределяем цвета теней Android на наш кастомный цвет
-                this.ambientShadowColor = shadowColor
-                this.spotShadowColor = shadowColor
-
-                this.clip = true
-                this.shape = RoundedCornerShape(10.dp)
             }
+            // 1. Сначала рисуем тень (она выходит наружу)
+            .shadow(
+                elevation = elevation,
+                shape = RoundedCornerShape(10.dp),
+                clip = false, // Тень не должна обрезаться!
+                ambientColor = shadowColor,
+                spotColor = shadowColor
+            )
+            // 2. Только потом клипаем внутренний контент карточки
+            .clip(RoundedCornerShape(10.dp))
             .clickable(
                 interactionSource = interactionSource,
                 indication = null
             ) { },
-        shape = RoundedCornerShape(10.dp),
-        colors = CardDefaults.cardColors(
-            // Карточка будет чуть светлее общего фона в темной теме
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
-        )
+        // Возвращаем ваш исходный цвет фона
+        color = MaterialTheme.colorScheme.surface
     ) {
         Column(modifier = Modifier.padding(10.dp)) {
             Text(
